@@ -100,7 +100,7 @@ void split(int now,int val,int &x,int &y)
 int merge(int x,int y)
 {
     if(!x||!y) return x+y;
-    if(rnd()&1)           // > >= < <=
+    if(fhq[x].key>fhq[y].key)           // > >= < <=
     {
         fhq[x].r=merge(fhq[x].r,y);
         update(x);
