@@ -153,7 +153,6 @@ void solve(int u)
         for(int j=0;j<cnt;j++)
             if(k>=tmp[j])
                 ans+=query(1,k-tmp[j])+1;
-            // else if(k==tmp[j]) ans++;
         for(int j=0;j<cnt;j++)
         {
             q.push(tmp[j]);
