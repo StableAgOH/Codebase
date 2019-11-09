@@ -58,47 +58,14 @@ inline void print(T x, T2... oth)
 using FastIO::print;
 using FastIO::read;
 //======================================
-const int maxn = 1e5+5;
-const int maxm = 2e5+5;
+const int maxn = 1e4+5;
+const int maxm = 5e5+5;
 struct E
 {
-    int w,to,next;
+    int u,v,w;
 }Edge[maxm];
-int tot,Head[maxn];
-inline void AddEdge(int u,int v,int w)
-{
-    Edge[tot]=(E){w,v,Head[u]};
-    Head[u]=tot++;
-}
-int dis[maxn];
-bool vis[maxn];     //用以充当Y集合
-#include <cstring>
-#include <queue>
-typedef std::pair<int,int> pii; //first为dis长度，second为结点编号
-std::priority_queue<pii,std::vector<pii>,std::greater<pii>> pq;
-void Dijkstra(int s)
-{
-    memset(dis,0x3f,sizeof(dis));   //因为“最短”，所以应初始化为无穷大
-    dis[s]=0;   //起点原地踏步长度一定为0且一定是最短的
-    pq.push(std::make_pair(0,s));   //起点s的dis被确定了，应该放进优先队列
-    while(!pq.empty())      //因为图是连通的，所以只要pq空了，就说明N集合空了
-    {
-        auto tmp = pq.top();
-        pq.pop();
-        int u = tmp.second;
-        if(vis[u]) continue;    //如果之前有被确定过，那就不要它了
-        vis[u]=true;    //因为是堆顶，所以是最短的，因Dijkstra的贪心思想所以dis被确定了下来
-        for(int i=Head[u];~i;i=Edge[i].next)    //松弛与之相连的结点
-        {
-            int v = Edge[i].to;
-            if(dis[u]+Edge[i].w<dis[v])
-            {
-                dis[v]=dis[u]+Edge[i].w;
-                pq.push(std::make_pair(dis[v],v));
-            }
-        }
-    }
-}
+long long dis[maxn];
+#include <algorithm>
 int main(int argc, char const *argv[])
 {
 #ifndef ONLINE_JUDGE
@@ -107,18 +74,28 @@ int main(int argc, char const *argv[])
 #endif
     clock_t c1 = clock();
     //======================================
-    memset(Head,-1,sizeof(Head));
     int n,m,s;
     read(n,m,s);
     for(int i=0;i<m;i++)
+        read(Edge[i].u,Edge[i].v,Edge[i].w);    //Bellman-Ford算法不需要链式前向星存图
+    std::fill(dis+1,dis+1+n,2147483647);//两句初始化，因为这里用的int的最大值，松弛操作有加法，所以dis要开longlong
+    dis[s]=0;
+    bool flag;
+    for(int i=1;i<n;i++)    //Bellman-Ford板子：|V|-1次对所有边进行松弛操作
     {
-        int u,v,w;
-        read(u,v,w);
-        AddEdge(u,v,w);
+        flag = true;
+        for(int j=0;j<m;j++)    //遍历所有边
+        {
+            if(dis[Edge[j].u]+Edge[j].w<dis[Edge[j].v])     //松弛操作
+            {
+                dis[Edge[j].v]=dis[Edge[j].u]+Edge[j].w;
+                flag = false;       //如果有更新，置flag为false
+            }
+        }
+        if(flag) break; //如果一次遍历所有边都没有更新dis值，那显然之后遍历所有边也不会更新dis值了，直接跳出即可
     }
-    Dijkstra(s);
     for(int i=1;i<=n;i++)
-        printf("%d ",dis[i]);
+        printf("%lld ",dis[i]);
     //======================================
     FastIO::flush();
     std::cerr << "Time:" << clock() - c1 << "ms" << std::endl;
