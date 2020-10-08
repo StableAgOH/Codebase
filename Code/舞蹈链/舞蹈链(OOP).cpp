@@ -45,9 +45,9 @@ private:
     }
     bool dance()
     {
-        if(!dcl[0].r)
-            return true;
         int col = dcl[0].r;
+        if(!col)
+            return true;
         for(int i=col;i;i=dcl[i].r)
             if(s[i]<s[col]) col = i;
         remove(col);
@@ -68,7 +68,7 @@ private:
 public:
     DLX(int col)
     {
-        s.reserve(col+5);       //动态开出空间
+        s.resize(col+5);       //动态开出空间
         for(int i=0;i<=col;i++)
             dcl.push_back( {i-1,i+1,i,i,0,0} );
         dcl[0].l = col;
