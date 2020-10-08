@@ -26,7 +26,7 @@ void init(int m)                //建立Head结点与列首结点
     for(int i=0;i<=m;i++)       //算上Head一共m+1个,其中dcl[0]代表Head
     {
         dcl[i].u = dcl[i].d = i;    //一开始是没有上下结点的,循环链表所以指向自己
-        dcl[i].l = i-1,dcl[i].r = i+1;  //但是有左右结点
+        dcl[i].l = i-1, dcl[i].r = i+1;  //但是有左右结点
     }
     dcl[m].r = 0;               //循环链表
     dcl[0].l = m;
@@ -44,56 +44,56 @@ void build(int n,int m)
             cin>>tmp;
             if(tmp)
             {
-                dcl[cnt].l=cnt-1;
-                dcl[cnt].r=cnt+1;
-                dcl[cnt].u=dcl[j].u;
-                dcl[cnt].d=j;           //循环链表
-                dcl[cnt].row=i;
-                dcl[cnt].col=j;
-                dcl[dcl[j].u].d=cnt;    //dcl[j]即为列首元素
-                dcl[j].u=cnt;           //循环链表
-                s[j]++,cnt++;
+                dcl[cnt].l = cnt-1;
+                dcl[cnt].r = cnt+1;
+                dcl[cnt].u = dcl[j].u;
+                dcl[cnt].d = j;           //循环链表
+                dcl[cnt].row = i;
+                dcl[cnt].col = j;
+                dcl[dcl[j].u].d = cnt;    //dcl[j]即为列首元素
+                dcl[j].u = cnt;           //循环链表
+                s[j]++, cnt++;
             }
         }
-        dcl[cnt-1].r=first;     //循环链表
-        dcl[first].l=cnt-1;
+        dcl[cnt-1].r = first;     //循环链表
+        dcl[first].l = cnt-1;
     }
 }
 void remove(int c)  //删除c列以及c列中结点所在行中的结点所在的列
 {
-    dcl[dcl[c].r].l=dcl[c].l;               //先把列首元素的关系断开
-    dcl[dcl[c].l].r=dcl[c].r;
+    dcl[dcl[c].r].l = dcl[c].l;               //先把列首元素的关系断开
+    dcl[dcl[c].l].r = dcl[c].r;
     for(int i=dcl[c].d;i!=c;i=dcl[i].d)     //遍历c列
     {
         for(int j=dcl[i].r;j!=i;j=dcl[j].r) //遍历c列中结点所在行中的结点
         {
-            dcl[dcl[j].d].u=dcl[j].u;       //断掉上下关系,注意没有断左右关系
-            dcl[dcl[j].u].d=dcl[j].d;
+            dcl[dcl[j].d].u = dcl[j].u;       //断掉上下关系,注意没有断左右关系
+            dcl[dcl[j].u].d = dcl[j].d;
             s[dcl[j].col]--;
         }
     }
 }
 void restore(int c) //恢复c列以及c列中结点所在行中的结点所在的列,把remove操作反着进行一次即可
 {
-    dcl[dcl[c].r].l=c;
-    dcl[dcl[c].l].r=c;
+    dcl[dcl[c].r].l = c;
+    dcl[dcl[c].l].r = c;
     for(int i=dcl[c].d;i!=c;i=dcl[i].d)
     {
         for(int j=dcl[i].r;j!=i;j=dcl[j].r)
         {
-            dcl[dcl[j].d].u=j;
-            dcl[dcl[j].u].d=j;
+            dcl[dcl[j].d].u = j;
+            dcl[dcl[j].u].d = j;
             s[dcl[j].col]++;
         }
     }
 }
 bool dance()
 {
-    if(dcl[0].r==0)     //如果十字链表中只剩下Head结点了
+    if(!dcl[0].r)     //如果十字链表中只剩下Head结点了
         return true;
     int c = dcl[0].r;
-    for(int i=c;i!=0;i=dcl[i].r)
-        if(s[i]<s[c]) c=i;      //找到结点数量最小的列,用来防止TLE
+    for(int i=c;i;i=dcl[i].r)
+        if(s[i]<s[c]) c = i;      //找到结点数量最小的列,用来防止TLE
     remove(c);
     for(int i=dcl[c].d;i!=c;i=dcl[i].d)
     {
