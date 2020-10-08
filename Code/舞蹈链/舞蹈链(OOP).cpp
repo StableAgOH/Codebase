@@ -5,6 +5,9 @@ using namespace std;
 //==========================================
 #include <vector>
 const int MAXN = 505;
+//* 此类为参考刘汝佳蓝书修改本人代码而成,不会添加详细注释
+//* 若需详细注释请阅读非OOP版舞蹈链
+//! 此代码必然会跑得很慢,建议搭配氧气使用
 class DLX
 {
 private:
@@ -65,13 +68,13 @@ private:
 public:
     DLX(int col)
     {
-        s.reserve(col+5);
+        s.reserve(col+5);       //动态开出空间
         for(int i=0;i<=col;i++)
             dcl.push_back( {i-1,i+1,i,i,0,0} );
         dcl[0].l = col;
         dcl[col].r = 0;
     }
-    void addRow(int r,vector<int>& col)
+    void addRow(int r,vector<int>& col)     //为十字链表增加一行,r为行编号,col中存放值为1的列的编号
     {
         int first = dcl.size();
         for(int c : col)
@@ -84,7 +87,7 @@ public:
         dcl[dcl.size()-1].r = first;
         dcl[first].l = dcl.size()-1;
     }
-    auto& solve() { return dance(),ans; }
+    auto& solve() { return dance(),ans; }   //若无解则ans必为空
 };
 int main(int argc, char const *argv[])
 {
@@ -96,7 +99,7 @@ int main(int argc, char const *argv[])
     //======================================
     int n,m;
     cin>>n>>m;
-    static DLX solver(m);
+    DLX solver(m);          //实例化
     for(int i=1;i<=n;i++)
     {
         vector<int> v;
@@ -104,7 +107,7 @@ int main(int argc, char const *argv[])
         {
             int tmp;
             cin>>tmp;
-            if(tmp) v.push_back(j);
+            if(tmp) v.push_back(j);     //注意存放的是列编号
         }
         solver.addRow(i,v);
     }
