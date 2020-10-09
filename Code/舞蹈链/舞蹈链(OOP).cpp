@@ -1,4 +1,5 @@
 #include <vector>
+#include <functional>
 //* 此类为参考刘汝佳蓝书修改本人代码而成
 //* 算法流程不会添加详细注释
 //* 若需算法流程详细注释请阅读非OOP版舞蹈链
@@ -10,7 +11,7 @@ private:
     std::vector<Node> dcl;
     std::vector<int> s,ans;
     bool ms;                                        //是否多解
-    void (*process)(std::vector<int>&);             //在得到一个解后对答案进行处理
+    std::function<void(std::vector<int>&)> process; //在得到一个解后对答案进行处理
 
     void remove(int col)
     {
@@ -89,7 +90,7 @@ public:
         dcl[dcl.size()-1].r = first;
         dcl[first].l = dcl.size()-1;
     }
-    bool solve(void (*fun)(std::vector<int>&))      //传入一个用于处理每个解的答案的函数
+    bool solve(std::function<void(std::vector<int>&)> fun)  //传入一个用于处理每个解的答案的函数
     {
         process = fun;
         return dance();
