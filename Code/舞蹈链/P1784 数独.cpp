@@ -112,21 +112,6 @@ inline auto decode(int n)
     x = n;
     return make_tuple(x,r,c);
 }
-inline void transandprint(vector<int>& v)
-{
-    for(auto i : v)
-    {
-        int x,r,c;
-        tie(x,r,c) = decode(i);
-        sdk[r][c] = x+1;
-    }
-    for(int i=1;i<=9;i++)
-    {
-        for(int j=1;j<=9;j++)
-            cout<<sdk[i][j]<<' ';
-        cout<<endl;
-    }
-}
 int main(int argc, char const *argv[])
 {
 #ifdef LOCAL
@@ -156,7 +141,20 @@ int main(int argc, char const *argv[])
             }
         }
     }
-    solver.solve(transandprint);
+    solver.solve([](vector<int> &v) {
+        for(auto i : v)
+        {
+            int x,r,c;
+            tie(x,r,c) = decode(i);
+            sdk[r][c] = x+1;
+        }
+        for(int i=1;i<=9;i++)
+        {
+            for(int j=1;j<=9;j++)
+                cout<<sdk[i][j]<<' ';
+            cout<<endl;
+        }
+    });
     //======================================
 end:
     cerr << "Time Used:" << clock() - c1 << "ms" << endl;
