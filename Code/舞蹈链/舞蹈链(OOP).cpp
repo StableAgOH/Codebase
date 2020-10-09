@@ -1,19 +1,16 @@
-#include <iostream>
-#include <cstdio>
-#include <ctime>
-using namespace std;
-//==========================================
 #include <vector>
-const int MAXN = 505;
-//* 此类为参考刘汝佳蓝书修改本人代码而成,不会添加详细注释
-//* 若需详细注释请阅读非OOP版舞蹈链
+//* 此类为参考刘汝佳蓝书修改本人代码而成
+//* 算法流程不会添加详细注释
+//* 若需算法流程详细注释请阅读非OOP版舞蹈链
 //! 此代码必然会跑得很慢,建议搭配氧气使用
 class DLX
 {
 private:
     struct Node{ int l,r,u,d,row,col; };
-    vector<Node> dcl;
-    vector<int> s,ans;
+    std::vector<Node> dcl;
+    std::vector<int> s,ans;
+    bool ms;                                        //是否多解
+    void (*process)(std::vector<int>&);             //在得到一个解后对答案进行处理
 
     void remove(int col)
     {
@@ -47,7 +44,10 @@ private:
     {
         int col = dcl[0].r;
         if(!col)
+        {
+            process(ans);                           //得到了一个解
             return true;
+        }
         for(int i=col;i;i=dcl[i].r)
             if(s[i]<s[col]) col = i;
         remove(col);
@@ -56,7 +56,8 @@ private:
             ans.push_back(dcl[i].row);
             for(int j=dcl[i].r;j!=i;j=dcl[j].r)
                 remove(dcl[j].col);
-            if(dance()) return true;
+            bool flag = dance();
+            if(flag&&!ms) return true;              //若只需要一个解则return
             for(int j=dcl[i].r;j!=i;j=dcl[j].r)
                 restore(dcl[j].col);
             ans.pop_back();
@@ -66,56 +67,31 @@ private:
     }
 
 public:
-    DLX(int col)
+    DLX(int col,bool hasMultipleSolutions=false)    //传入列数及是否多解
     {
-        s.resize(col+5);       //动态开出空间
+        ms = hasMultipleSolutions;
+        s.resize(col+5);                            //动态开出空间
         for(int i=0;i<=col;i++)
             dcl.push_back( {i-1,i+1,i,i,0,0} );
         dcl[0].l = col;
         dcl[col].r = 0;
     }
-    void addRow(int r,vector<int>& col)     //为十字链表增加一行,r为行编号,col中存放值为1的列的编号
+    void addRow(int row,std::vector<int>& col)      //为十字链表增加一行,row为行编号,col中存放值为1的列的编号
     {
         int first = dcl.size();
         for(int c : col)
         {
             int tmp = dcl.size();
-            dcl.push_back( {tmp-1,tmp+1,dcl[c].u,c,r,c} );
+            dcl.push_back( {tmp-1,tmp+1,dcl[c].u,c,row,c} );
             dcl[c].u = dcl[dcl[c].u].d = tmp;
             s[c]++;
         }
         dcl[dcl.size()-1].r = first;
         dcl[first].l = dcl.size()-1;
     }
-    auto& solve() { return dance(),ans; }   //若无解则ans必为空
-};
-int main(int argc, char const *argv[])
-{
-#ifdef LOCAL
-    freopen("in.in", "r", stdin);
-    freopen("out.out", "w", stdout);
-#endif
-    clock_t c1 = clock();
-    //======================================
-    int n,m;
-    cin>>n>>m;
-    DLX solver(m);          //实例化
-    for(int i=1;i<=n;i++)
+    bool solve(void (*fun)(std::vector<int>&))      //传入一个用于处理每个解的答案的函数
     {
-        vector<int> v;
-        for(int j=1;j<=m;j++)
-        {
-            int tmp;
-            cin>>tmp;
-            if(tmp) v.push_back(j);     //注意存放的是列编号
-        }
-        solver.addRow(i,v);
+        process = fun;
+        return dance();
     }
-    auto ans = solver.solve();
-    if(ans.empty()) cout<<"No Solution!"<<endl;
-    else for(auto i : ans) cout<<i<<' ';
-    //======================================
-end:
-    cerr << "Time Used:" << clock() - c1 << "ms" << endl;
-    return 0;
-}
+};
