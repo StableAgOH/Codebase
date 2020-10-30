@@ -54,7 +54,7 @@ private:
             bool flag = dance();
             ret |= flag;
             if(flag&&!ms) return true;                  //若只需要一个解则return
-            for(int j=dcl[i].r;j!=i;j=dcl[j].r)         //回溯,对应第二次删除
+            for(int j=dcl[i].l;j!=i;j=dcl[j].l)         //回溯,对应第二次删除
                 restore(dcl[j].col);
             ans.pop_back();                             //回溯,弹出已使用的行编号
         }
