@@ -1,3 +1,7 @@
+/* 2020-11-1：这个struct写的实在是太垃圾了，
+ * 以后有时间再写一个吧，
+ * 别学这个struct，真的垃圾
+ */
 #include <iostream>
 #include <cstring>
 using namespace std;
