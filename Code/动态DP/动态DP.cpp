@@ -74,7 +74,7 @@ inline void AddEdge(int u,int v)
     Edge[tot].next=Head[u];
     Head[u]=tot++;
 }
-//TODO 为了学这个又写了个简化版的矩阵模板，方便快捷好写好用，可以学习一下，Github上有
+//TODO 这个矩阵模板写错了不要学
 template <int row,int col>
 struct Matrix
 {
