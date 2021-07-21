@@ -35,8 +35,8 @@ void splaying(int x,int top)//代表把x转到top的儿子，top为0则转到根
 void newnode(int &now,int fa,int val)   //新建节点，要注意fa指针的初始化
 {
     spl[now=++cnt].val=val;
-    spl[now].fa=fa;
-    spl[now].size=spl[now].cnt=1;
+    spl[cnt].fa=fa;
+    spl[cnt].size=spl[now].cnt=1;
 }
 void delnode(int x)                 //删除结点，要注意fa指针的维护
 {
