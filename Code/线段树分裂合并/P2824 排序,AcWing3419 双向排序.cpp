@@ -95,7 +95,7 @@ auto split(int p)   // 使得rt中存在以p为区间左端点的元素
 void solve(int l, int r, bool rev)
 {
     if(l>r) return;
-    auto itl = split(l), itr = split(r+1);  // 良好的习惯：左开右闭区间，便于下面的for操作
+    auto itl = split(l), itr = split(r+1);  // 良好的习惯：左闭右开区间，便于下面的for操作
     int n = 0;
     for(auto it = itl; it!=itr; ++it)
         merge(n, get<2>(*it));              // 为使他们具有相同的排序顺序，合并起来再塞回去
