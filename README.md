@@ -1,5 +1,7 @@
-# 蒟蒻AgOH的代码仓库
+# Bilibili 代码仓库
 
-bilibili主页：https://space.bilibili.com/120174936
+B 站视频内的代码
 
-视频中的PPT请加群：940656404
+[bilibili 主页](https://space.bilibili.com/120174936)
+
+视频中的PPT请加 QQ 群：940656404
